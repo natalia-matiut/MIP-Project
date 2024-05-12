@@ -1,0 +1,516 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage{longtable} 
+\usepackage{array}
+
+\begin{document}
+
+
+\title{Sorting Algorithms}
+\author{Natalia-Ana Matiuț}
+\date{\today}
+
+\maketitle
+
+\begin{center}
+    Department of Computer Science, \\
+    West University Timișoara \\
+    email: natalia.matiut04@e-uvt.ro \\
+\end{center}
+
+
+\begin{abstract}   
+    This paper serves as a thorough exploration of sorting algorithms, checking and understanding how they work, performance profiles, and practical implications. Each algorithm is presented in an easy to understand way, offering pseudo-code, complexity evaluations, and real-world performance insights. From the most easy and efficient sorting, the Quicksort to the straightforward and simple Bubble Sort, and from the favorite divide-and-conquer approach of Merge Sort to the specialized counting mechanisms of Counting Sort, this paper provides its readers with a simple understanding of sorting algorithms' capabilities and their best domains. Whether it's selecting the optimal algorithm for a specific task or gaining deeper insights into sorting algorithmic, this paper stands as a guide for novice learners in the realm of computer science.
+\end{abstract}
+
+\newpage 
+
+\section*{Contents}
+\begin{center}
+\begin{longtable}{@{}c>{\large}p{8cm}c@{}}
+
+1 & QuickSort & 2 \\
+2 & BubbleSort & 3 \\
+3 & CocktailSort & 5 \\
+4 & MergeSort & 7 \\
+5 & InsertionSort & 9 \\
+6 & SelectionSort & 11 \\
+7 & CountingSort & 13 \\
+
+\end{longtable}
+\end{center}
+
+\section*{References}
+
+\begin{enumerate}[label={[\arabic*]}]
+    \item \textit{Sorting and Searching} - Donald E. Knuth
+    \item \textit{A Comparison of Sorting Algorithms} - Philip L. Johnson
+    \item \textit{Introspective Sorting and Selection Algorithms} - David R. Musser
+    \item \textit{Optimal Parallel Merge Sort} - Guy E. Blelloch
+    \item \textit{Performance Analysis of Sorting Algorithms on Different Data Types} - Priti P. Rege and Dr. C. R. Kene
+    \item \textit{A Radix Sort} - C. A. R. Hoare
+\end{enumerate}
+
+\newpage 
+
+\begin{center}
+\section*{1.Quicksort}
+\end{center}
+
+Quicksort is a method of sorting a list of items, such as numbers on cards. Initially, we select a "pivot" item from the list and partition the remaining items into two groups: those smaller than the pivot and those larger. This process is repeated for each subgroup until all items are sorted. Quicksort's effectiveness lies in its ability to divide the sorting task into smaller, more manageable subtasks, best to organize clutter by categorizing items into smaller groups and arranging each group systematically. \newline
+
+\subsection*{Quicksort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Quicksort}\label{quicksort}
+\begin{algorithmic}[1]
+\Procedure{Quicksort}{$arr, low, high$}
+\If{$low < high$}
+    \State $pivot\_index \gets \text{partition}(arr, low, high)$
+    \State \text{Quicksort}(arr, low, pivot\_index - 1)
+    \State \text{Quicksort}(arr, pivot\_index + 1, high)
+\EndIf
+\EndProcedure
+
+\Procedure{Partition}{$arr, low, high$}
+\State $pivot \gets arr[high]$
+\State $i \gets low - 1$
+\For{$j \gets low$ \textbf{to} $high - 1$}
+    \If{$arr[j] \leq pivot$}
+        \State $i \gets i + 1$
+        \State swap $arr[i]$ with $arr[j]$
+    \EndIf
+\EndFor
+\State swap $arr[i + 1]$ with $arr[high]$
+\State \textbf{return} $i + 1$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N \log N)$
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                          & Instantly            \\ \hline
+100                         & Less than one second \\ \hline
+1000                        & Less than a second  \\ \hline
+10,000                      & 3 seconds           \\ \hline
+100,000                     & 8 seconds           \\ \hline
+1,000,000                   & 18 seconds          \\ \hline
+10,000,000                  & 3 minutes and 48 seconds \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Sometimes, Quick Sort can take a long time to sort data if it's not done right, especially when the pivot point is chosen poorly. & Quick Sort is a method where we break down big problems into smaller ones to solve them more easily. \\ \hline
+Quick Sort isn't the best option for sorting small amounts of data. & It works well and fast when dealing with lots of data. \\ \hline
+The order of equal elements might change in the sorted list. & Quick Sort doesn't need much memory to work efficiently. \\ \hline
+\end{tabular}
+\end{table}
+
+\;
+
+\begin{center}
+\section*{2.Bubblesort}
+\end{center}
+
+Bubble sort is a simple sorting algorithm where adjacent elements in a list are compared and swapped if they are in the wrong order. This process repeats until the list is sorted. It's called "bubble" sort because smaller elements "bubble up" to their correct positions. While easy to understand and implement, bubble sort is not very efficient for large lists compared to other sorting methods. \\
+
+\subsection*{Bubblesort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Bubble Sort}\label{bubblesort}
+\begin{algorithmic}[1]
+\Procedure{BubbleSort}{$arr$}
+    \State $n \gets \text{length}(arr)$
+    \For{$i \gets 0$ \textbf{to} $n-1$}
+        \For{$j \gets 0$ \textbf{to} $n-1-i$}
+            \If{$arr[j] > arr[j+1]$}
+                \State swap($arr[j]$, $arr[j+1]$)
+            \EndIf
+        \EndFor
+    \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N^2)$
+
+\newpage 
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                          & Instantly            \\ \hline
+100                         & Less than one second \\ \hline
+1000                        & 2 seconds           \\ \hline
+10,000                      & 23 seconds          \\ \hline
+100,000                     & Ran for 11 minutes and it was still going \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Bubble sort gets really slow with a lot of data, making it not great for big lists. & Bubble sort is easy to learn and use. \\ \hline
+Bubble sort needs to compare items a lot, which can make it slower compared to other ways of sorting, especially in specific situations. & It doesn't need extra memory. \\ \hline
+ & It keeps items with the same value in the same order they were in before sorting. \\ \hline
+\end{tabular}
+\end{table}
+\clearpage
+
+\newpage 
+
+
+\begin{center}
+\section*{3. Cocktail Shaker Sort}
+\end{center}
+
+The cocktail shaker sort is very similar to the bubble sort, it is a sorting algorithm that works by repeatedly passing through a list of items, swapping neighboring items if they are in the wrong order. Unlike bubble sort, which only moves in one direction, cocktail shaker sort starts at one end of the list and moves back and forth like a cocktail shaker until no more swaps are needed. This process ensures that the items end up in the correct order, with the smallest ones at the beginning and the largest ones at the end. It's called "cocktail shaker" because it mimics the motion of shaking a cocktail shaker back and forth. This allows cocktail sort to address some of the inefficiencies of bubble sort by preventing it from getting stuck in certain parts of the list. \\
+
+\subsection*{Cocktailsort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Cocktail Sort}\label{cocktailsort}
+\begin{algorithmic}[1]
+\Procedure{CocktailSort}{$arr$}
+    \State $n \gets \text{length}(arr)$
+    \State $swapped \gets \text{true}$
+    \State $start \gets 0$
+    \State $end \gets n - 1$
+    \While{$swapped$}
+        \State $swapped \gets \text{false}$
+        \For{$i \gets start$ \textbf{to} $end-1$}
+            \If{$arr[i] > arr[i+1]$}
+                \State swap($arr[i]$, $arr[i+1]$)
+                \State $swapped \gets \text{true}$
+            \EndIf
+        \EndFor
+        \If{\textbf{not} $swapped$}
+            \State \textbf{exit while}
+        \EndIf
+        \State $swapped \gets \text{false}$
+        \For{$i \gets end-1$ \textbf{to} $start$}
+            \If{$arr[i] > arr[i+1]$}
+                \State swap($arr[i]$, $arr[i+1]$)
+                \State $swapped \gets \text{true}$
+            \EndIf
+        \EndFor
+        \State $start \gets start + 1$
+        \State $end \gets end - 1$
+    \EndWhile
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N^2)$
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                           & Instantly            \\ \hline
+100                          & Less than a second   \\ \hline
+1000                         & Close to 1 second    \\ \hline
+10,000                       & A second             \\ \hline
+100,000                      & 4 seconds            \\ \hline
+1,000,000                    & 43 seconds           \\ \hline
+10,000,000                   & Around 7 minutes     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+The algorithm requires additional tracking of starting and ending indices for subarrays during each pass, which can lead to increased memory usage. & Cocktail sort offers improved efficiency over bubble sort in certain scenarios, particularly when there are only a few unsorted elements towards the end of the array. \\ \hline
+Other sorting methods like merge sort and quicksort provide superior average and worst-case time complexities compared to cocktail sort, rendering it less efficient for larger datasets. & It's easy to grasp and implement, making it ideal for educational purposes or handling smaller sets of data. \\ \hline
+ & Cocktail sort exhibits a worst-case time complexity of $O(N^2)$, indicating potential slowness with larger or partially sorted datasets. \\ \hline
+\end{tabular}
+\end{table}
+
+\newpage
+
+\begin{center}
+    \section*{4. Merge Sort}
+\end{center}
+
+
+Mergsort is a sorting algorithm that works by dividing the list into smaller parts, sorting each part separately, and then merging them back together in the correct order. It keeps dividing the list until each part is very small and then merges them in a way that maintains the sorted order. This process continues until the entire list is sorted. Mergesort is efficient and stable, meaning it retains the relative order of equal elements. \\ 
+
+\subsection*{Mergesort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Merge Sort}
+\label{mergesort}
+\begin{algorithmic}
+\Procedure{MergeSort}{$A$}
+    \If{$\text{length of } A \leq 1$}
+        \State \textbf{return} $A$
+    \EndIf
+    \State $mid \gets \text{length of } A / 2$
+    \State $left \gets \text{MergeSort(first half of } A)$
+    \State $right \gets \text{MergeSort(second half of } A)$
+    \State \textbf{return} \text{Merge}(left, right)
+\EndProcedure
+
+\Procedure{Merge}{$left, right$}
+    \State $result \gets \text{empty array}$
+    \While{$\text{left is not empty}$ \textbf{and} $\text{right is not empty}$}
+        \If{$\text{first element of } left \leq \text{first element of } right$}
+            \State \text{append first element of } left \text{ to } result
+            \State \text{remove first element from } left
+        \Else
+            \State \text{append first element of } right \text{ to } result
+            \State \text{remove first element from } right
+        \EndIf
+    \EndWhile
+    \State \text{append all remaining elements of } left \text{ to } result
+    \State \text{append all remaining elements of } right \text{ to } result
+    \State \textbf{return} $result$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N \log N)$
+
+\newpage 
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                           & Instantly            \\ \hline
+100                          & Less than a second   \\ \hline
+1000                         & Close to 1 second    \\ \hline
+10,000                       & A second             \\ \hline
+100,000                      & 5 seconds            \\ \hline
+1,000,000                    & 30 seconds           \\ \hline
+10,000,000                   & Around 10 minutes    \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Space Complexity: Additional memory is needed to store merged sub-arrays during sorting. & Stability: Merge sort maintains the original order of equal elements in the input array. \\ \hline
+Not In-place: Merge sort doesn't sort data in its original location, requiring extra memory for the sorted data. & Consistent Performance: With a worst-case time complexity of $O(N \log N)$, Merge sort performs efficiently even with large datasets. \\ \hline
+Suboptimal for Small Datasets: Merge sort may be less efficient for small datasets compared to algorithms like insertion sort, resulting in slower performance. & Parallelizability: Merge sort can be easily parallelized, making it compatible with multiple processors or threads. \\ \hline
+\end{tabular}
+\end{table}
+
+
+\newpage 
+
+\begin{center}
+    \section*{5. Insertion Sort}
+\end{center}
+
+
+Insertion sort is a basic sorting method that works by taking one element at a time from an unsorted list and placing it in its correct position within a sorted list. It does this by comparing each element with the ones before it until it finds the right spot. This process continues until all elements are sorted. While efficient for small or nearly sorted lists, it may be less practical for larger ones compared to more advanced sorting algorithms. \\
+
+\subsection*{Insertionsort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Insertion Sort}\label{insertionsort}
+\begin{algorithmic}[1]
+\Procedure{InsertionSort}{$arr$}
+    \State $n \gets \text{length}(arr)$
+    \For{$i \gets 1$ \textbf{to} $n-1$}
+        \State $key \gets arr[i]$
+        \State $j \gets i - 1$
+        \While{$j \geq 0$ \textbf{and} $arr[j] > key$}
+            \State $arr[j + 1] \gets arr[j]$
+            \State $j \gets j - 1$
+        \EndWhile
+        \State $arr[j + 1] \gets key$
+    \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N^2)$
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                           & Instantly            \\ \hline
+100                          & Less than a second   \\ \hline
+1000                         & Close to 1 second    \\ \hline
+10,000                       & 4 seconds            \\ \hline
+100,000                      & 32 seconds           \\ \hline
+1,000,000                    & Way past 10 minutes  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Inefficient for Large Lists: Insertion sort's performance slows down significantly as the number of elements increases, making it impractical for sorting large lists. & Efficient for Small Data Sets: Insertion sort performs well with small datasets and nearly sorted lists due to its simplicity and low overhead. \\ \hline
+Fixed Approach: It follows the same sorting strategy regardless of the input data, which means it doesn't adapt well to different types of lists or datasets. & Adaptive: It performs particularly well when dealing with partially sorted arrays or when elements are added to a sorted list incrementally. \\ \hline
+Quadratic Time Complexity: The time it takes to sort grows quadratically with the number of elements, leading to slower performance compared to more efficient sorting algorithms for larger datasets. & Simple Implementation: Its straightforward algorithm makes insertion sort easy to understand and implement, making it suitable for educational purposes and situations where simplicity is preferred over complexity. \\ \hline
+\end{tabular}
+\end{table}
+\clearpage
+
+\newpage
+
+\begin{center}
+    \section*{6. Selection Sort}
+\end{center}
+
+
+Selection sort works by repeatedly selecting the smallest element from the unsorted portion of the array and moving it to the beginning. It continues this process until the entire array is sorted. Although easy to understand and implement, it can be inefficient for large datasets due to its quadratic time complexity. \\
+
+\subsection*{Selectionsort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Selection Sort}\label{selectionsort}
+\begin{algorithmic}[1]
+\Procedure{SelectionSort}{$arr$}
+    \State $n \gets \text{length}(arr)$
+    \For{$i \gets 0$ \textbf{to} $n - 1$}
+        \State $minIndex \gets i$
+        \For{$j \gets i + 1$ \textbf{to} $n$}
+            \If{$arr[j] < arr[minIndex]$}
+                \State $minIndex \gets j$
+            \EndIf
+        \EndFor
+        \If{$minIndex \neq i$}
+            \State swap($arr[i]$, $arr[minIndex]$)
+        \EndIf
+    \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N^2)$
+
+\newpage 
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                           & Instantly            \\ \hline
+100                          & Less than a second   \\ \hline
+1000                         & Close to 1 second    \\ \hline
+10,000                       & 16 seconds           \\ \hline
+100,000                      & Way past 10 minutes  \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Selection sort has a time complexity of $O(N^2)$ in the worst and average case, struggles to maintain efficiency when confronted with sizable datasets, often resulting in slow sorting times, and fails to uphold the relative order of items sharing equal keys, rendering it an unstable sorting algorithm. & Demonstrates simplicity and ease of comprehension, making it accessible for learners and programmers alike. Performs admirably with small datasets, offering an efficient solution for sorting tasks with limited elements. Provides a straightforward implementation, reducing the complexity of coding and debugging processes. \\ \hline
+\end{tabular}
+\end{table}
+\clearpage
+
+
+
+\begin{center}
+    \section*{7. Counting Sort}
+\end{center}
+
+
+Counting sort is a sorting algorithm that organizes elements by counting their frequency and determining their sorted positions based on those counts. It operates efficiently when the range of elements is known beforehand, but it requires extra memory space proportional to the range of elements. \\
+
+\subsection*{Countingsort algorithm in pseudocode:}
+
+\begin{algorithm}
+\caption{Counting Sort}\label{countingsort}
+\begin{algorithmic}[1]
+\Procedure{CountingSort}{$arr, k$}
+    \State let $C[0..k]$ be a new array
+    \State let $B[0..n-1]$ be a new array
+    \For{$i = 0$ \textbf{to} $k$}
+        \State $C[i] \gets 0$
+    \EndFor
+    \For{$j = 0$ \textbf{to} $\text{arr.length} - 1$}
+        \State $C[arr[j]] \gets C[arr[j]] + 1$
+    \EndFor
+    \For{$i = 1$ \textbf{to} $k$}
+        \State $C[i] \gets C[i] + C[i-1]$
+    \EndFor
+    \For{$j = \text{arr.length} - 1$ \textbf{downto} $0$}
+        \State $B[C[arr[j]] - 1] \gets arr[j]$
+        \State $C[arr[j]] \gets C[arr[j]] - 1$
+    \EndFor
+    \State \textbf{return} $B$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Complexity:} $O(N+M)$
+
+\newpage 
+
+\textbf{Experiments:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Number of Elements} & \textbf{Time Taken} \\ \hline
+10                           & Instantly            \\ \hline
+100                          & Less than a second   \\ \hline
+1000                         & Less than a second   \\ \hline
+10,000                       & Close to a second    \\ \hline
+100,000                      & 8 seconds            \\ \hline
+1,000,000                    & 1 minute and 20s     \\ \hline
+10,000,000                   & Around 8 minutes     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Disadvantages} & \textbf{Advantages} \\ \hline
+Counting sort cannot handle decimal values, becomes inefficient when sorting a large range of values, and is not an in-place sorting algorithm; it requires extra space to sort array elements. & Counting sort generally outperforms comparison-based sorting algorithms like merge sort and quicksort, particularly when the input range is comparable to the number of inputs. Counting sort is straightforward to code. Counting sort maintains stability throughout its execution. \\ \hline
+\end{tabular}
+\end{table}
+\clearpage
+
+
+
+
+\end{document}
+ 
